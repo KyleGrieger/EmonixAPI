@@ -27,8 +27,8 @@ class openHeatingValveResource:
                 break
         output = ''.join(stdout)
         response = {} 
-        response['console_response'] = str(output)
-        resp.body = response
+        response['console_response'] = output
+        resp.body = fmt(response)
         return response
 
 class closeHeatingValveResource:
@@ -45,8 +45,8 @@ class closeHeatingValveResource:
                 break
         output = ''.join(stdout)
         response = {} 
-        response['console_response'] = str(output)
-        resp.body = response
+        response['console_response'] = output
+        resp.body = fmt(response)
         return response
 
 # falcon.API instances are callable WSGI apps
