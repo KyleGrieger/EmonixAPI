@@ -22,11 +22,9 @@ class openHeatingValveResource:
         while True:
             line = p.stdout.readline()
             stdout.append(line)
-            print line,
             if line == '' and p.poll() != None:
                 break
         output = ''.join(stdout)
-        print output
         resp.body = output
         return output
 
@@ -39,11 +37,9 @@ class closeHeatingValveResource:
         while True:
             line = p.stdout.readline()
             stdout.append(line)
-            print line,
             if line == '' and p.poll() != None:
                 break
         output = ''.join(stdout)
-        print output
         resp.body = output
         return output
 

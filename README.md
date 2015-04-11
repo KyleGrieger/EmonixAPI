@@ -28,5 +28,10 @@ Should open the valve and return stdout
 
 Should close the valve and return stdout
 
+*Please note that this is not a secure API and does not require authentication.
+The api should only be run for demonstration purposes until authentication is added.
+
+
+
 
 
