@@ -16,7 +16,8 @@ def cors_header(req, resp):
 class openHeatingValveResource:
     def on_get(self, req, resp):
         """Handles GET requests"""
-        resp.status = falcon.HTTP_200  # This is the default status
+        resp.status = falcon.HTTP_200 
+        resp.set_header('Access-Control-Allow-Origin', '*') # This is the default status
         p = subprocess.Popen(['~/NestAPI/setvent.sh 85 open'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
         while True:
@@ -25,13 +26,16 @@ class openHeatingValveResource:
             if line == '' and p.poll() != None:
                 break
         output = ''.join(stdout)
-        resp.body = output
-        return output
+        response = {} 
+        response['console_response'] = str(output)
+        resp.body = response
+        return response
 
 class closeHeatingValveResource:
     def on_get(self, req, resp):
         """Handles GET requests"""
-        resp.status = falcon.HTTP_200  # This is the default status
+        resp.status = falcon.HTTP_200
+        resp.set_header('Access-Control-Allow-Origin', '*')  # This is the default status
         p = subprocess.Popen(['~/NestAPI/setvent.sh 85 close'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
         while True:
@@ -40,8 +44,10 @@ class closeHeatingValveResource:
             if line == '' and p.poll() != None:
                 break
         output = ''.join(stdout)
-        resp.body = output
-        return output
+        response = {} 
+        response['console_response'] = str(output)
+        resp.body = response
+        return response
 
 # falcon.API instances are callable WSGI apps
 app = falcon.API()
