@@ -73,12 +73,14 @@ class emailResource:
             print(content)
             s.sendmail(FROM, TO, content)
             s.quit()
-
-            return 'sent mail'
+            response = 'message: ' + content +' was sent'
+            resp.body = fmt(response)
+            return response
 
         except:
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             print('exception %s was thrown' % exceptionValue)
+            resp.body = 'exception %s was thrown' % exceptionValue
             return 'exception %s was thrown' % exceptionValue
 
 
