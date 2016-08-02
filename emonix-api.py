@@ -1,3 +1,13 @@
+__author__ = 'Kyle Grieger'
+"""
+Simple REST API for Emonix climate control system at the Wisconsin Energy and Sustainability Challenge 2014
+
+Routes:
+    /valve/open - opens heating duct valve 
+    /valve/close - closes heating duct valve 
+    /email/{message}/from/{email}/name/{name}/sub/{subject} - sends email notification of valve state change
+"""
+
 from wsgiref import simple_server
 import os
 import sys
@@ -16,7 +26,6 @@ def cors_header(req, resp):
 
 class openHeatingValveResource:
     def on_get(self, req, resp):
-        """Handles GET requests"""
         resp.status = falcon.HTTP_200 
         resp.set_header('Access-Control-Allow-Origin', '*') # This is the default status
         p = subprocess.Popen(['~/NestAPI/setvent.sh 85 open'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -34,7 +43,6 @@ class openHeatingValveResource:
 
 class closeHeatingValveResource:
     def on_get(self, req, resp):
-        """Handles GET requests"""
         resp.status = falcon.HTTP_200
         resp.set_header('Access-Control-Allow-Origin', '*')  # This is the default status
         p = subprocess.Popen(['~/NestAPI/setvent.sh 85 close'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -49,9 +57,9 @@ class closeHeatingValveResource:
         response['console_response'] = output
         resp.body = fmt(response)
         return response
+
 class emailResource:
     def on_get(self, req, resp, message, email, name, subject ):
-        """Handles GET requests"""
         resp.status = falcon.HTTP_200
         resp.set_header('Access-Control-Allow-Origin', '*')
         try:
@@ -76,13 +84,11 @@ class emailResource:
             response = 'message: ' + content +' was sent'
             resp.body = fmt(response)
             return response
-
         except:
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             print('exception %s was thrown' % exceptionValue)
             resp.body = 'exception %s was thrown' % exceptionValue
             return 'exception %s was thrown' % exceptionValue
-
 
 # falcon.API instances are callable WSGI apps
 app = falcon.API()
@@ -92,7 +98,6 @@ openValve = openHeatingValveResource()
 closeValve = closeHeatingValveResource()
 sendEmail = emailResource()
 
-# things will handle all requests to the '/things' URL path
 app.add_route('/valve/open', openValve)
 app.add_route('/valve/close', closeValve)
 app.add_route('/email/{message}/from/{email}/name/{name}/sub/{subject}', sendEmail)
